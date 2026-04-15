@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grid Bot Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+  :root{--bg:#f8f7f4;--surface:#fff;--surface-2:#f1efe9;--border:#e8e4dc;--border-light:#f0ede6;--text:#2c2c2c;--text-sec:#7a7568;--text-muted:#a9a294;--green:#3a9d6a;--green-light:#e8f5ee;--green-border:#c1e4d0;--red:#d45d5d;--red-light:#fbeaea;--red-border:#f0c8c8;--amber:#c48a1a;--amber-light:#fef6e4;--amber-border:#f0dca8;--blue:#4a7fd4;--blue-light:#eaf0fb;--blue-border:#bfd3f0;--purple:#8b6cc1;--shadow-sm:0 1px 3px rgba(0,0,0,.04);--shadow-md:0 4px 12px rgba(0,0,0,.05);--radius:14px;--radius-sm:8px}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:32px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+  .header-left{display:flex;align-items:center;gap:16px}
+  .header h1{font-size:20px;font-weight:600}
+  .tag{font-size:13px;font-weight:500;padding:4px 12px;border-radius:20px;background:var(--surface-2);color:var(--text-sec);border:1px solid var(--border)}
+  .pill{font-size:12px;font-weight:500;padding:5px 14px;border-radius:20px}
+  .pill-paper{background:var(--amber-light);color:var(--amber);border:1px solid var(--amber-border)}
+  .pill-live{background:var(--green-light);color:var(--green);border:1px solid var(--green-border)}
+  .pill-refresh{background:var(--blue-light);color:var(--blue);border:1px solid var(--blue-border);font-size:11px;display:none}
+  .pill-refresh.on{display:inline-block}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:28px}
+  .card{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow-sm);transition:box-shadow .2s,transform .2s}
+  .card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+  .card .lbl{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;font-weight:500;margin-bottom:8px}
+  .card .val{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;letter-spacing:-.5px}
+  .card .sub{font-size:12px;color:var(--text-muted);margin-top:4px}
+  .pos{color:var(--green)}.neg{color:var(--red)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}
+  @media(max-width:900px){.grid2{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}body{padding:16px}}
+  .panel{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm)}
+  .panel-h{padding:16px 22px;border-bottom:1px solid var(--border-light);font-weight:600;font-size:14px}
+  .panel-b{padding:16px 22px;max-height:520px;overflow-y:auto}
+  .panel-b::-webkit-scrollbar{width:4px}.panel-b::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+  .gl{display:flex;align-items:center;padding:9px 0;border-bottom:1px solid var(--border-light);font-size:13px}
+  .gl:last-child{border-bottom:none}
+  .gl .idx{width:32px;color:var(--text-muted);font-size:11px;font-family:'JetBrains Mono',monospace}
+  .gl .pr{flex:1;font-family:'JetBrains Mono',monospace;font-weight:500}
+  .gl .ot{font-size:10px;font-weight:600;padding:3px 10px;border-radius:6px;text-transform:uppercase;letter-spacing:.5px}
+  .ot-buy{background:var(--green-light);color:var(--green);border:1px solid var(--green-border)}
+  .ot-sell{background:var(--red-light);color:var(--red);border:1px solid var(--red-border)}
+  .ot-hold{background:var(--amber-light);color:var(--amber);border:1px solid var(--amber-border)}
+  .gl.zone{background:var(--blue-light);border-radius:var(--radius-sm);padding:10px;margin:4px -10px;border-bottom-color:transparent}
+  .gl.zone .pr{color:var(--blue);font-weight:700}
+  .tr{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-light);font-size:13px;gap:12px}
+  .tr:last-child{border-bottom:none}
+  .tr .tm{font-family:'JetBrains Mono',monospace;color:var(--text-muted);font-size:11px}
+  .tr .sb{font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;text-transform:uppercase}
+  .tr .dt{flex:1;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-sec)}
+  .landing{max-width:480px;margin:120px auto;text-align:center}
+  .landing-icon{width:72px;height:72px;background:var(--surface);border:1px solid var(--border);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 24px;box-shadow:var(--shadow-md)}
+  .landing h2{font-size:22px;font-weight:600;margin-bottom:8px}
+  .landing p{color:var(--text-sec);font-size:14px;margin-bottom:28px;line-height:1.7}
+  .landing code{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surface-2);padding:2px 8px;border-radius:5px;border:1px solid var(--border)}
+  .btn-g{display:flex;flex-direction:column;gap:10px;align-items:center}
+  .btn1{background:var(--text);color:var(--bg);padding:12px 32px;border-radius:10px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;font-size:14px;border:none;box-shadow:var(--shadow-md)}
+  .btn1:hover{opacity:.85}
+  .btn2{background:var(--surface);color:var(--text-sec);border:1px solid var(--border);padding:10px 24px;border-radius:10px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px}
+  .btn2:hover{border-color:var(--text-muted)}
+  .sep{color:var(--text-muted);font-size:12px}
+  .file-input{display:none}
+  .empty{text-align:center;padding:40px;color:var(--text-muted);font-size:13px}
+  .footer{text-align:center;padding:20px 0;font-size:11px;color:var(--text-muted)}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="landing">
+    <div class="landing-icon">G</div>
+    <h2>Grid Bot Dashboard</h2>
+    <p>Load your bot's state file to see live metrics.<br>The bot writes to <code>grid_bot_state.json</code> every tick.</p>
+    <div class="btn-g">
+      <label class="btn1" for="fileInput">Load State File</label>
+      <input type="file" id="fileInput" class="file-input" accept=".json">
+      <span class="sep">or</span>
+      <button class="btn2" id="demoBtn">View Demo</button>
+    </div>
+  </div>
+</div>
+<script>
+let fileHandle=null,refreshInterval=null;
+function fmt(n,d=2){return n.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d})}
+
+function generateDemoData(){
+  const cp=71192,lo=65000,up=75000,ng=10,step=(up-lo)/ng,inv=753;
+  const gl=[];for(let i=0;i<=ng;i++){const p=lo+i*step;gl.push({price:Math.round(p*100)/100,has_buy_order:p<cp,has_sell_order:p>cp,holding_crypto:p>cp})}
+  const trades=[{t:'10:23:15',s:'buy',p:70000},{t:'10:45:02',s:'sell',p:71000},{t:'11:12:44',s:'buy',p:69000},{t:'11:38:19',s:'buy',p:68000},{t:'12:05:33',s:'sell',p:69000},{t:'12:22:01',s:'buy',p:70000},{t:'13:01:45',s:'sell',p:71000},{t:'13:34:12',s:'sell',p:72000}];
+  return{config:{symbol:'BTC/USDT',upper_price:up,lower_price:lo,num_grids:ng,total_investment:inv,fee_rate:0.001,geometric:false},grid_levels:gl,trades:trades.map(e=>({timestamp:`2026-04-13T${e.t}`,side:e.s,price:e.p,actual_price:e.p+Math.random()*100-50,amount:inv/ng/e.p,cost:inv/ng,fee:.075,grid_level:0})),usdt_balance:401.2,crypto_balance:0.00493,total_fees_paid:0.63,total_profit:2.91,num_completed_cycles:4,start_time:'2026-04-13T10:00:00',last_price:cp,last_update:new Date().toISOString(),total_value:401.2+.00493*cp,mode:'paper'}
+}
+
+function render(d){
+  const pnl=d.total_value-d.config.total_investment,pnlP=(pnl/d.config.total_investment*100).toFixed(2),pc=pnl>=0?'pos':'neg',ps=pnl>=0?'+':'',cv=d.crypto_balance*d.last_price;
+  const ms=new Date(d.last_update)-new Date(d.start_time),hrs=Math.floor(ms/36e5),mins=Math.floor(ms%36e5/6e4);
+  const el=hrs>=24?`${Math.floor(hrs/24)}d ${hrs%24}h`:`${hrs}h ${mins}m`;
+  const mode=d.mode==='live'?'live':'paper',ml=mode==='live'?'Live':'Paper',mc=mode==='live'?'pill-live':'pill-paper';
+  const sp=d.config.geometric?'Geo':'Linear',ra=fileHandle!==null;
+
+  document.getElementById('app').innerHTML=`
+    <div class="header"><div class="header-left"><h1>Grid Bot</h1><span class="tag">${d.config.symbol}</span><span class="tag">${sp}</span></div>
+    <div style="display:flex;gap:12px;align-items:center"><span class="pill pill-refresh ${ra?'on':''}" id="rb">Auto-refresh</span><span class="pill ${mc}">${ml}</span></div></div>
+    <div class="stats">
+      <div class="card"><div class="lbl">Current Price</div><div class="val mono">$${fmt(d.last_price)}</div><div class="sub">${d.config.symbol}</div></div>
+      <div class="card"><div class="lbl">Portfolio Value</div><div class="val mono">$${fmt(d.total_value)}</div><div class="sub">USDT $${fmt(d.usdt_balance)} + Crypto $${fmt(cv)}</div></div>
+      <div class="card"><div class="lbl">Unrealized P&L</div><div class="val mono ${pc}">${ps}$${fmt(Math.abs(pnl))}</div><div class="sub ${pc}">${ps}${pnlP}%</div></div>
+      <div class="card"><div class="lbl">Grid Profit</div><div class="val mono ${d.total_profit>=0?'pos':'neg'}">$${fmt(d.total_profit)}</div><div class="sub">${d.num_completed_cycles} cycles</div></div>
+      <div class="card"><div class="lbl">Fees</div><div class="val mono" style="color:var(--amber)">$${fmt(d.total_fees_paid)}</div><div class="sub">${(d.config.fee_rate*100).toFixed(1)}%/trade</div></div>
+      <div class="card"><div class="lbl">Runtime</div><div class="val mono" style="color:var(--purple)">${el}</div><div class="sub">${d.trades.length} trades</div></div>
+    </div>
+    <div class="grid2">
+      <div class="panel"><div class="panel-h">Grid Levels</div><div class="panel-b">${gridList(d)}</div></div>
+      <div class="panel"><div class="panel-h">Recent Trades</div><div class="panel-b">${tradeLog(d)}</div></div>
+    </div>
+    <div class="footer">Updated ${new Date(d.last_update).toLocaleTimeString()} &middot; $${fmt(d.config.lower_price,0)}-$${fmt(d.config.upper_price,0)} &middot; ${d.config.num_grids} grids</div>`;
+}
+
+function gridList(d){
+  const lv=[...d.grid_levels].reverse(),n=lv.length,step=(d.config.upper_price-d.config.lower_price)/d.config.num_grids;
+  return lv.map((l,di)=>{
+    const ri=n-1-di;let tag='<span class="ot" style="color:var(--text-muted)">&mdash;</span>',zc='';
+    if(l.has_buy_order)tag='<span class="ot ot-buy">Buy</span>';
+    else if(l.has_sell_order)tag='<span class="ot ot-sell">Sell</span>';
+    else if(l.holding_crypto)tag='<span class="ot ot-hold">Hold</span>';
+    if(Math.abs(l.price-d.last_price)<step/2)zc='zone';
+    return`<div class="gl ${zc}"><span class="idx">${ri}</span><span class="pr">$${fmt(l.price)}</span>${tag}</div>`;
+  }).join('');
+}
+
+function tradeLog(d){
+  if(!d.trades||!d.trades.length)return'<div class="empty">No trades yet.</div>';
+  return[...d.trades].reverse().slice(0,25).map(t=>{
+    const tm=new Date(t.timestamp).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    const ib=t.side==='buy',bc=ib?'ot-buy':'ot-sell';
+    return`<div class="tr"><span class="tm">${tm}</span><span class="sb ${bc}">${t.side}</span><span class="dt">$${fmt(t.price)} &middot; ${t.amount.toFixed(6)} &middot; $${fmt(t.cost)}</span></div>`;
+  }).join('');
+}
+
+async function startAutoRefresh(h){fileHandle=h;await refresh();if(refreshInterval)clearInterval(refreshInterval);refreshInterval=setInterval(refresh,5000)}
+async function refresh(){if(!fileHandle)return;try{const f=await fileHandle.getFile();render(JSON.parse(await f.text()))}catch(e){console.warn('Refresh:',e.message)}}
+
+document.getElementById('fileInput').addEventListener('change',async e=>{
+  const f=e.target.files[0];if(!f)return;
+  try{render(JSON.parse(await f.text()))}catch(err){alert('Bad JSON: '+err.message)}
+  if(window.showOpenFilePicker){try{const[h]=await window.showOpenFilePicker({types:[{accept:{'application/json':['.json']}}]});startAutoRefresh(h)}catch(e){}}
+});
+document.getElementById('demoBtn').addEventListener('click',()=>render(generateDemoData()));
+document.addEventListener('dragover',e=>e.preventDefault());
+document.addEventListener('drop',async e=>{e.preventDefault();const f=e.dataTransfer?.files[0];if(f?.name.endsWith('.json'))try{render(JSON.parse(await f.text()))}catch(err){alert('Bad JSON')}});
+</script>
+</body>
+</html>

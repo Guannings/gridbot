@@ -1,0 +1,7 @@
+grid_bot_state.json
+grid_bot_log.json
+config.json
+.DS_Store
+__pycache__/
+*.pyc
+.env
