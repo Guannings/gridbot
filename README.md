@@ -6,11 +6,51 @@ Date: April 2026
 
 Tech Stack: Python, ccxt, OKX API
 
-## **1. Risk Disclaimer**
+# **IMPORTANT LEGAL DISCLAIMER AND RISK DISCLOSURE**
 
-This bot is for **educational and research purposes**. Trading cryptocurrency involves significant risk of loss. Grid trading can and will lose money during strong trending markets. **Never invest more than you can afford to lose.** The author is not a financial advisor. All trading decisions are made at your own risk.
+**1. GENERAL DISCLAIMER**
 
-## **2. What is Grid Trading?**
+The content, signals, data, and software provided herein (collectively, the "System") are for informational, educational, and research purposes only. The Creator and associated contributors (the "Authors") are not registered financial advisors, broker-dealers, or investment professionals. Nothing in this System constitutes personalized investment advice, a recommendation to buy, sell, or hold any security or cryptocurrency, or a solicitation of any offer to buy or sell any financial instruments.
+
+**2. NO FIDUCIARY DUTY**
+
+You acknowledge that no fiduciary relationship exists between you and the Authors. All investment decisions are made solely by you at your own discretion and risk. You agree to consult with a qualified, licensed financial advisor or tax professional before making any financial decisions based on the outputs of this System.
+
+**3. RISK OF LOSS (CRYPTOCURRENCY)**
+
+Trading in cryptocurrency markets, particularly **Bitcoin (BTC)**, involves a high degree of risk and may not be suitable for all investors.
+
+* **Volatility Risk:** Bitcoin is extremely volatile and can experience 50%+ drawdowns within weeks. You may sustain a total loss of your initial invested capital.
+
+* **Grid Trading Risk:** Grid trading strategies profit from sideways/ranging markets. During strong directional trends, grid bots will accumulate losing positions (buying into a crash or selling into a rally). Historical backtests do not guarantee future performance.
+
+* **Regulatory Risk:** Cryptocurrency regulations vary by jurisdiction and may change without notice, potentially affecting your ability to trade, hold, or withdraw BTC.
+
+* **Custodial Risk:** Digital assets may be lost due to exchange failures, hacking incidents, or loss of private keys.
+
+* **Leverage Risk:** If leverage is used, losses are amplified proportionally. A leveraged grid bot can be liquidated during extreme market moves.
+
+**4. HYPOTHETICAL PERFORMANCE DISCLOSURE**
+
+The results presented in this project, including backtests and historical simulations, are hypothetical. Hypothetical or simulated performance results have certain inherent limitations. Unlike an actual performance record, simulated results do not represent actual trading. Also, since the trades have not actually been executed, the results may have under- or over-compensated for the impact, if any, of certain market factors, such as lack of liquidity. No representation is being made that any account will or is likely to achieve profits or losses similar to those shown. Past performance is not necessarily indicative of future results.
+
+**5. ALGORITHMIC AND TECHNICAL RISKS**
+
+The System relies on real-time price data from OKX via the ccxt library and third-party APIs.
+
+* The bot relies on external API data which may be delayed, inaccurate, or unavailable. The Authors do not guarantee the accuracy, timeliness, or completeness of the data.
+
+* The code is provided "AS IS" without warranty of any kind. There may be errors, bugs, or glitches in the logic that could result in incorrect orders or financial loss.
+
+* Network outages, exchange downtime, or API rate limits may cause the bot to miss trades or behave unexpectedly.
+
+**6. LIMITATION OF LIABILITY**
+
+**IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SYSTEM, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.**
+
+=============================================================================
+
+## **1. What is Grid Trading?**
 
 Grid trading profits from **price oscillation within a defined range**. Instead of predicting direction, it systematically buys low and sells high across a grid of price levels.
 
@@ -139,6 +179,5 @@ gridbot/
 ├── grid_bot_dashboard.html  # Browser dashboard
 ├── requirements.txt         # Python dependencies
 ├── config.json              # Saved settings (auto-created, gitignored)
-├── grid_bot_state.json      # Live state for dashboard (auto-created, gitignored)
-└── SESSION.md               # Development session notes
+└── grid_bot_state.json      # Live state for dashboard (auto-created, gitignored)
 ```
