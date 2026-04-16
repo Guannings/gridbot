@@ -1,6 +1,6 @@
 # **Grid Trading Bot — Paper & Live Trading on OKX**
 
-Author: [PEHC]
+Author: [PARVAUX]
 
 Date: April 2026
 
