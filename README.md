@@ -2,7 +2,7 @@
 
 Author: [PARVAUX]
 
-Date: April 2026
+Date: 18 April 2026
 
 Tech Stack: Python, ccxt, OKX API
 
