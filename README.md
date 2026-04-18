@@ -111,7 +111,7 @@ pip install -r requirements.txt
 python grid_bot.py
 ```
 
-The interactive setup will walk you through: pair selection, grid range, number of grids, spacing mode, investment amount, and safety settings.
+The interactive setup will walk you through: pair selection, grid range, number of grids, spacing mode, investment amount, and safety settings. After setup, you can **run a backtest with your exact config** before starting — pick any period (30, 90, 180, 365 days) to see how your settings would have performed historically.
 
 ## **6. Backtesting**
 
