@@ -72,7 +72,7 @@ $70,000 ─── BUY
 4. Price rises to a sell level → bot sells, places buy one level down
 5. Each buy→sell cycle = profit (grid spread minus fees)
 
-## **3. Backtest Results**
+## **2. Backtest Results**
 
 Backtested on BTC/USDT using **realistic high/low candle fills** (not just close prices).
 
@@ -86,7 +86,7 @@ Backtested on BTC/USDT using **realistic high/low candle fills** (not just close
 
 Annualized: **~57% APR** in choppy markets. Grid consistently outperforms buy & hold.
 
-## **4. Prerequisites**
+## **3. Prerequisites**
 
 **a. Python 3.10+**
 
@@ -97,7 +97,7 @@ pip install ccxt
 
 **c. OKX Account** (for live trading only — paper trading needs no account)
 
-## **5. Quick Start**
+## **4. Quick Start**
 
 ```bash
 # Clone the repo
@@ -113,7 +113,7 @@ python grid_bot.py
 
 The interactive setup will walk you through: pair selection, grid range, number of grids, spacing mode, investment amount, and safety settings. After setup, you can **run a backtest with your exact config** before starting — pick any period (30, 90, 180, 365 days) to see how your settings would have performed historically.
 
-## **6. Backtesting**
+## **5. Backtesting**
 
 ```bash
 # Single backtest with defaults
@@ -129,7 +129,7 @@ python backtest.py --sweep --days 30
 python backtest.py --symbol ETH/USDT --sweep --days 30
 ```
 
-## **7. Live Trading Setup**
+## **6. Live Trading Setup**
 
 **API keys are read from environment variables only — never stored on disk.**
 
@@ -142,7 +142,7 @@ python grid_bot.py
 
 The bot will detect the API keys and ask for **double confirmation** before enabling live mode.
 
-## **8. Running 24/7**
+## **7. Running 24/7**
 
 ```bash
 # Using tmux (recommended)
@@ -152,11 +152,11 @@ python grid_bot.py
 # tmux attach -t gridbot to come back
 ```
 
-## **9. Dashboard**
+## **8. Dashboard**
 
 Open `grid_bot_dashboard.html` in a browser and load `grid_bot_state.json` to see live metrics. Supports auto-refresh on Chrome/Edge.
 
-## **10. Features**
+## **9. Features**
 
 | Feature | Description |
 |---------|-------------|
@@ -170,7 +170,7 @@ Open `grid_bot_dashboard.html` in a browser and load `grid_bot_state.json` to se
 | Config persistence | Saves to config.json, API keys stay in env vars |
 | Graceful shutdown | Ctrl+C cancels all live orders before exiting |
 
-## **11. Regime Detection — Why We Don't Have It**
+## **10. Regime Detection — Why We Don't Have It**
 
 We tested 3 approaches to auto-adjust the grid when price trends out of range. All were backtested across 90, 180, and 365-day periods on BTC/USDT. All performed worse than a static grid.
 
@@ -190,7 +190,7 @@ We tested 3 approaches to auto-adjust the grid when price trends out of range. A
 
 > Detailed backtest data in `SESSION.md`.
 
-## **12. Project Structure**
+## **11. Project Structure**
 
 ```
 gridbot/
