@@ -170,7 +170,27 @@ Open `grid_bot_dashboard.html` in a browser and load `grid_bot_state.json` to se
 | Config persistence | Saves to config.json, API keys stay in env vars |
 | Graceful shutdown | Ctrl+C cancels all live orders before exiting |
 
-## **11. Project Structure**
+## **11. Regime Detection — Why We Don't Have It**
+
+We tested 3 approaches to auto-adjust the grid when price trends out of range. All were backtested across 90, 180, and 365-day periods on BTC/USDT. All performed worse than a static grid.
+
+**Approaches tested:**
+
+| Approach | Mechanism | Result |
+|----------|-----------|--------|
+| Full rebalance | Sell all crypto, recenter grid around current price | -15% vs +1% static (90d) |
+| Upward-only rebalance | Same as above but only shift upward | -15% vs +3% static (365d) |
+| Trailing grid | Shift one level at a time (drop bottom, add top) | -20% vs +1% static (90d) |
+
+**Detection used:** ATR (14-period) + Bollinger Band width (20-period) on 1h candles to classify RANGING vs TRENDING.
+
+**Why they all failed:** BTC dropped from ~$116K to ~$60K over the past 6 months. Any dynamic adjustment that moved the grid upward during rallies bought crypto at high prices. When the crash came, those positions got destroyed. The static grid's "do nothing when out of range" behavior accidentally protected capital by avoiding buys at the top.
+
+**Takeaway:** Grid bots are fundamentally a ranging strategy. The grid going idle when price leaves the range is a feature, not a bug. Manual range adjustment when price stabilizes at a new level is safer than algorithmic auto-adjustment.
+
+> Detailed backtest data in `SESSION.md`.
+
+## **12. Project Structure**
 
 ```
 gridbot/
