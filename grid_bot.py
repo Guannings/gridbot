@@ -760,6 +760,25 @@ def interactive_setup() -> GridConfig:
         else:
             print(f"    {idx:2d}  ${gp:>10,.2f}")
 
+    # Optional backtest before starting
+    bt_input = input(f"\n  Run a backtest with these settings first? [Y/n]: ").strip().lower()
+    if bt_input != "n":
+        bt_days = input(f"  Backtest period in days (e.g. 30, 90, 180, 365) [30]: ").strip()
+        bt_days = int(bt_days) if bt_days else 30
+        try:
+            from backtest import BacktestConfig, run_backtest, print_results
+            bt_cfg = BacktestConfig(
+                symbol=symbol, days=bt_days, num_grids=num_grids,
+                total_investment=investment, fee_rate=0.001,
+                upper_price=upper, lower_price=lower,
+                geometric=geometric,
+            )
+            results = run_backtest(bt_cfg)
+            print_results(results)
+        except Exception as e:
+            print(f"  Backtest error: {e}")
+            print(f"  Skipping backtest, continuing to bot setup...")
+
     confirm = input(f"\n  Start bot? [Y/n]: ").strip().lower()
     if confirm == "n":
         print("  Cancelled.")
