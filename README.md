@@ -38,9 +38,9 @@ The results presented in this project, including backtests and historical simula
 
 The System relies on real-time price data from OKX via the ccxt library and third-party APIs.
 
-* The bot relies on external API data which may be delayed, inaccurate, or unavailable. The Authors do not guarantee the accuracy, timeliness, or completeness of the data.
+The bot relies on external API data which may be delayed, inaccurate, or unavailable. The Authors do not guarantee the accuracy, timeliness, or completeness of the data.
 
-* Network outages, exchange downtime, or API rate limits may cause the bot to miss trades or behave unexpectedly.
+Network outages, exchange downtime, or API rate limits may cause the bot to miss trades or behave unexpectedly.
 
 
 
